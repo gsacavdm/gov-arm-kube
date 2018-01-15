@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "naming_prefix": {
+      "defaultValue": "contoso",
+      "type": "string"
+    },
+    "AdminPolicyObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
+      }
+    },
+    "SecretToHold": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The sample secret that will be used in the application in this quickstart."
+      }
+    }
+  },
+  "variables": {
+    "vaultName": "[concat(parameters('naming_prefix'), '-vault')]",
+    "secretName": "[concat(parameters('naming_prefix'), '-secret')]"
+  },
+  "resources": [
+    {
+      "comments": "",
+      "type": "Microsoft.KeyVault/vaults",
+      "name": "[variables('vaultName')]",
+      "apiVersion": "2015-06-01",
+      "location": "[resourceGroup().location]",
+      "tags": {},
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": [
+          {
+            "tenantId": "[subscription().tenantId]",
+            "objectId": "[parameters('AdminPolicyObjectId')]",
+            "permissions": {
+              "keys": [
+                "Get",
+                "List",
+                "Update",
+                "Create",
+                "Import",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
+              ],
+              "secrets": [
+                "Get",
+                "List",
+                "Set",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "name": "[concat(variables('vaultName'), '/', variables('secretName'))]",
+      "apiVersion": "2015-06-01",
+      "properties": {
+        "value": "[parameters('SecretToHold')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.KeyVault/vaults/', variables('vaultName'))]"
+      ]
+    }
+  ]
+}

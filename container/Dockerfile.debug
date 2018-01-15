@@ -1,0 +1,13 @@
+FROM python:2.7-alpine
+RUN pip install Flask
+
+ENV secret=myenvsecret
+
+RUN mkdir secrets && echo "myfilesecret" > secrets/secret
+
+EXPOSE 5000
+
+ADD app /app
+WORKDIR /app
+
+CMD python main.py

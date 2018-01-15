@@ -3,13 +3,19 @@
 # Abort on error
 set -e
 
-# Delete secret file if exits
-# (as silently does nothing if file exists)
-[ -e tmp ] && rm tmp --recursive
+if [[ $# -eq 0 ]] ; then
+  echo "Usage: apply.sh AZURE_NAMING_PREFIX"
+  exit 1
+fi
+
+# Ensure our tmp folder exists and is clean.
+# (as az keyvault download is fragile and fails silently)
+[ ! -e tmp ] && mkdir tmp
+[ -e tmp ] && rm tmp/* -f
 
 # Download the secret
 echo "Downloading secret"
-az keyvault secret download --vault-name sacagov-vault -n sacasecret -f tmp/secret
+az keyvault secret download --vault-name $1-vault -n $1-secret -f tmp/secret
 
 # Read the value
 SECRET=$(cat tmp/secret)
@@ -22,11 +28,11 @@ SECRET=$(cat tmp/secret)
 
 # Improve approach: Python
 echo "Creating yaml file"
-python replace.py $SECRET
+python replace.py "$SECRET"
 
 echo "Deploying to Kubernetes"
 #kubectl create -f tmp/secret.yaml
 kubectl apply -f tmp/secret.yaml
 
 echo "Deleting files"
-rm tmp/*
+rm tmp --recursive

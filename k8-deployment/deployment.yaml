@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: secretvault
+spec:
+  template:
+    metadata:
+      labels:
+        app: secretvaultapp
+    spec:
+      containers:
+      - name: secretvault
+        image: registry.sacacorp.com/secretvault
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: secret
+          valueFrom:
+            secretKeyRef:
+              name: govsecret
+              key: secret1
+        volumeMounts:
+        - name: secret-volume
+          readOnly: true
+          mountPath: "/secrets"
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: govsecret
+          items:
+          - key: secret2
+            path: secret
