@@ -15,7 +15,7 @@ def main():
   
   returnString = "The Secret Vault<br/>"
   returnString += "<b>Secret from environment variable</b> (secret): %s<br/>" % secretEnviron 
-  returnString += "<b>Secret from volume<b/> (/secrets/secret): %s" % secretVol
+  returnString += "<b>Secret from volume</b> (/secrets/secret): %s" % secretVol
 
   return returnString
 
