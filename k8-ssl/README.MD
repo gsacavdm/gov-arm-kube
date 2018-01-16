@@ -9,3 +9,9 @@ helm install --set config.LEGO_EMAIL=you@domain.tld --set config.LEGO_URL=https:
 
 ```
 
+## Important Notes
+
+```yaml
+ingress.kubernetes.io/proxy-body-size: 0m
+```
+
