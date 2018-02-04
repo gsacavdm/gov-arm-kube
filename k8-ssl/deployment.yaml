@@ -8,7 +8,7 @@ metadata:
     name: ingress
 spec:
     rules:
-      - host: registry.sacacorp.com 
+      - host: registry.contoso.com 
         http:
           paths:
             - backend:
@@ -17,5 +17,5 @@ spec:
               path: /
     tls:
         - hosts:
-            - registry.sacacorp.com
+            - registry.contoso.com
           secretName: registry-tls
