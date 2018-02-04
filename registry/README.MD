@@ -1,6 +1,13 @@
 # Create the Docker Registry
 (Inside of Kubernetes since Azure Container Registry isn't available in Azure Government)
 
+## Naming Convention
+TBD
+
+## Assumptions
+TBD
+
+## Instructions
 1. `kubectl create -f registry/deployment.yaml`
 1. `kubectl expose deployment registry --type=LoadBalancer`
 1. `kubectl get service registry`
@@ -8,10 +15,14 @@
 
 ## Outstanding Items
 * Add persistent volume
+  * Add storage account
 * Scale (at least add another replica)
 * Add SSL cert and DNS entry
 * Add Auth
 * Make service part of config not a command
 
+## Next Steps
+[Setup SSL for the Docker registry](../k8-ssl/)
 
-
+## References
+TBD
