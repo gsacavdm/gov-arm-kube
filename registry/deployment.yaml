@@ -14,3 +14,12 @@ spec:
         ports:
         - containerPort: 5000
           protocol: TCP
+        volumeMounts:
+        - name: azure
+          mountPath: /mnt/azu
+      volumes:
+      - name: azure
+        azureFile:
+          secretName: azfileshare
+          shareName: registry
+          readOnly: false
