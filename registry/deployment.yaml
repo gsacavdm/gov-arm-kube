@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: registry
 spec:
+  replicas: 1
   template:
     metadata:
       labels:
@@ -16,7 +17,7 @@ spec:
           protocol: TCP
         volumeMounts:
         - name: azure
-          mountPath: /mnt/azu
+          mountPath: /var/lib/registry
       volumes:
       - name: azure
         azureFile:
